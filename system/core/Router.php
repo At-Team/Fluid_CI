@@ -88,6 +88,9 @@ class CI_Router {
 		$this->config =& load_class('Config', 'core');
 		$this->uri =& load_class('URI', 'core');
 		log_message('debug', "Router Class Initialized");
+
+		$this->fluid =& load_class('Fluid', 'core');
+
 	}
 
 	// --------------------------------------------------------------------
@@ -183,6 +186,7 @@ class CI_Router {
 	 */
 	function _set_default_controller()
 	{
+
 		if ($this->default_controller === FALSE)
 		{
 			show_error("Unable to determine what should be displayed. A default route has not been specified in the routing file.");
@@ -465,7 +469,7 @@ class CI_Router {
 	 */
 	function set_directory($dir)
 	{
-		$this->directory = str_replace(array('/', '.'), '', $dir).'/';
+		$this->directory = $dir;//str_replace(array('/', '.'), '', $dir).'/';
 	}
 
 	// --------------------------------------------------------------------

@@ -168,7 +168,7 @@ class CI_URI {
 		// foreach ($f as $t){
 		// 	$fluid_temp = $fluid_temp . " - " . $t;
 		// }
-
+		
 		if ($fluid_temp[0] == $this->fluid->get_fluid_keyword()){
 			
 
@@ -181,14 +181,15 @@ class CI_URI {
 				$this->fluid->set_user_group(array_shift($fluid_temp));
 			}
 			else{
+				
 				$this->fluid->set_default_user_group();
 			}
 		}
-
+//show_error('Reseted $str is ' . $str . ' Fluid usergroup is "' . $this->fluid->get_user_group() . '"' );
 		//reset the str back to normal
 		$str = implode('/', $fluid_temp);
 
-//		show_error('Reseted $str is ' . $str . ' Fluid usergroup is "' . $this->fluid->get_user_group() . '"' );
+
 
 		// Filter out control characters
 		$str = remove_invisible_characters($str, FALSE);

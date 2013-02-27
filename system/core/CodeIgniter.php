@@ -162,6 +162,7 @@
  *  Instantiate the URI class
  * ------------------------------------------------------
  */
+
 	$URI =& load_class('URI', 'core');
 
 /*
@@ -170,6 +171,7 @@
  * ------------------------------------------------------
  */
 	$RTR =& load_class('Router', 'core');
+
 	$RTR->_set_routing();
 
 	// Set any routing overrides that may exist in the main index file
@@ -178,6 +180,14 @@
 		$RTR->_set_overrides($routing);
 	}
 
+
+	
+
+	$FD =& load_class('Fluid', 'core');
+
+	$FD->set_ci_customization();
+
+	//show_error($RTR->fetch_directory() . 'fas');
 /*
  * ------------------------------------------------------
  *  Instantiate the output class
@@ -239,6 +249,9 @@
 		require APPPATH.'core/'.$CFG->config['subclass_prefix'].'Controller.php';
 	}
 
+
+
+	//show_error(APPPATH.'controllers/'.$RTR->fetch_directory().$RTR->fetch_class().'.php');
 	// Load the local application controller
 	// Note: The Router class automatically validates the controller path using the router->_validate_request().
 	// If this include fails it means that the default controller in the Routes.php file is not resolving to something valid.
@@ -248,6 +261,7 @@
 	}
 
 	include(APPPATH.'controllers/'.$RTR->fetch_directory().$RTR->fetch_class().'.php');
+
 
 	// Set a mark point for benchmarking
 	$BM->mark('loading_time:_base_classes_end');
@@ -261,6 +275,7 @@
  *  loader class can be called via the URI, nor can
  *  controller functions that begin with an underscore
  */
+
 	$class  = $RTR->fetch_class();
 	$method = $RTR->fetch_method();
 

@@ -35,6 +35,10 @@ class CI_Fluid {
 
 	public $keyword ;
 
+	public $cookie_name;
+
+//	public $RTR;
+
 	/**
 	 * Constructor
 	 *
@@ -47,6 +51,18 @@ class CI_Fluid {
 		 $this->usergroup ="";
 
 		 $this->keyword ="fluid";
+
+		 $this->cookie_name ="fluid_group";
+
+
+		 if (isset($_COOKIE[$this->cookie_name])   ){
+
+		 	if ($_COOKIE[$this->cookie_name] == "") return true;
+
+		 	$this->enable_fluid();
+		 	$this->set_user_group($_COOKIE[$this->cookie_name]);
+		 }
+
 	}
 
 	// return the fluid keyword
@@ -54,10 +70,30 @@ class CI_Fluid {
 		return $this->keyword;
 	}
 
+	//reset and disable the fluid.. 
+	//removes any custome user group applied
+
+	function disable_fluid(){
+		setcookie($this->cookie_name, '', (time() - 3600 ) , '/' );  /*delete cookie*/
+		$this->fluid_Enabled = false;
+
+		return true;
+	}
 	// enable me..
 	function enable_fluid(){
-		 $this->fluid_Enabled = true;
-		 return true;
+
+		if ($this->fluid_Enabled){
+	 	    if (isset($_COOKIE[$this->cookie_name]) &&  $_COOKIE[$this->cookie_name] == $this->get_user_group() ){
+			 	return true;
+			}
+		}
+
+		$this->fluid_Enabled = true;
+
+		//set default user group as fallback
+		//$this->set_default_user_group();
+
+		return true;
 	}
 
 	// return true or false 
@@ -68,17 +104,50 @@ class CI_Fluid {
 
 	//set the user group
 	function set_user_group($group){
-		$this->usergroup = $group;
+
+		if ($group == 'reset') {
+			$this->disable_fluid();
+			return true;
+		}
+
+		$this->usergroup = 'fluid/' . $group . '/';
+
+		setcookie($this->cookie_name, $group, (time() + (20 * 365 * 24 * 60 * 60) ) ,'/');  /*expire after 20yrs if your still alive cookie :P :P*/
+		
+		//set the controller directory
+		
+		//$this->set_controller_directory($this->usergroup);
+
 		return true;
+	}
+
+	function set_ci_customization(){
+		
+
+		if ($this->is_fluid_enabled() == false) return false;
+		$this->set_controller_directory($this->usergroup);
 	}
 
 	//sets the default user group
 	function set_default_user_group(){
 		$this->usergroup = "";
+
+		setcookie($this->cookie_name, '', (time() + (20 * 365 * 24 * 60 * 60)  ), '/' );  /*expire after 20yrs if your still alive cookie :P :P*/
+		//set the controller directory
+	//		$this->set_controller_directory('');
+
 		return true;
 	}
 
 
+	function set_controller_directory($dir){
+
+		$this->RTR =& load_class('Router', 'core');		
+		
+		//set the subdirectory if the usergroup is mentioned
+		$this->RTR->set_directory($dir);
+
+	}
 	//get the user group
 	function get_user_group(){
 		return $this->usergroup;
