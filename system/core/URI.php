@@ -162,32 +162,9 @@ class CI_URI {
 		
 
 
-
-		// $f = explode('/', $str);
-		$fluid_temp  = explode('/', $str);
-		// foreach ($f as $t){
-		// 	$fluid_temp = $fluid_temp . " - " . $t;
-		// }
+		$str =$this->fluid->parse_routes($str);
 		
-		if ($fluid_temp[0] == $this->fluid->get_fluid_keyword()){
-			
-
-			$this->fluid->enable_fluid();
-
-			array_shift($fluid_temp);
-			//check if user group is present or not
-			//if present set it or set the default group
-			if (count($fluid_temp) >= 1 ){
-				$this->fluid->set_user_group(array_shift($fluid_temp));
-			}
-			else{
-				
-				$this->fluid->set_default_user_group();
-			}
-		}
-//show_error('Reseted $str is ' . $str . ' Fluid usergroup is "' . $this->fluid->get_user_group() . '"' );
-		//reset the str back to normal
-		$str = implode('/', $fluid_temp);
+		//show_error($str . ' Url..');
 
 
 

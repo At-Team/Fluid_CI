@@ -54,6 +54,8 @@ class CI_Fluid {
 
 		 $this->cookie_name ="fluid_group";
 
+		 
+
 
 		 if (isset($_COOKIE[$this->cookie_name])   ){
 
@@ -105,6 +107,7 @@ class CI_Fluid {
 	//set the user group
 	function set_user_group($group){
 
+
 		if ($group == 'reset') {
 			$this->disable_fluid();
 			return true;
@@ -153,7 +156,68 @@ class CI_Fluid {
 		return $this->usergroup;
 	}
 
+	function parse_routes($str){
+
+		$fluid_temp  = explode('/', $str);
+
+		if ($fluid_temp[0] != $this->get_fluid_keyword()) return $str;
+
+		if ($fluid_temp[1] == 'reset'){
+			$this->disable_fluid();
+			return substr($str, strlen($this->get_fluid_keyword() . '/reset')); //length of fluid/reset
+		}
+		//we have reached so far and this means tat we got a match in fluid in url..
+		// $f = explode('/', $str);
+		//$fluid_temp  = explode('/', $str);
+
+
+		array_shift($fluid_temp);
+
+
+		$fluid_temp= substr($str, 6) ;
+
+		// foreach ($f as $t){
+		// 	$fluid_temp = $fluid_temp . " - " . $t;
+		// }
+	
+		// shift fluid
+
+		//check if user group is present or not
+		//if present set it or set the default group
+		include(APPPATH.'config/fluid.php');
+
+
+		$flag = false;
+
+		foreach ( $fluid as $key => $value) {
+
+			if ( preg_match('/^('. $key . ')+/' , $fluid_temp) !=0){
+
+				//show_error(preg_match('/^'. $key . '/' , $fluid_temp)  . 'match ' . $key . '  ' . $value);
+
+				$this->enable_fluid();
+				$this->set_user_group($value);
+				$flag = true;
+				//show_error($value . 'sf');
+				break;
+			}
+		}
+			
+
+		if (!$flag){
+			$this->disable_fluid();
+			show_error('No such group found. Check your group routes. Fluid is resetted');
+
+		}
+		// if enabled via cookie and no match found in url go using default url
+		// else we found a match and cut the url...
+
+			//show_error($this->get_user_group() );
+			return substr($fluid_temp, strlen($key));
+
+	}//function parse
 }
+
 // END Router Class
 
 /* End of file Router.php */

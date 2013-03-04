@@ -469,7 +469,12 @@ class CI_Router {
 	 */
 	function set_directory($dir)
 	{
-		$this->directory = $dir;//str_replace(array('/', '.'), '', $dir).'/';
+
+		if ($this->fluid->is_fluid_enabled()){
+			$this->directory = $dir;
+		}else{
+			$this->directory = str_replace(array('/', '.'), '', $dir) . '/';
+		}
 	}
 
 	// --------------------------------------------------------------------
