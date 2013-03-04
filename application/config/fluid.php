@@ -22,5 +22,8 @@
 
 */
 
+//give value as directroy path in respect to fluid.. without the leading /
+
+$fluid['adult'] = 'adult'
 $fluid['english'] =  'lang/english';
 $fluid['engindia'] =  'lang/english/india';
