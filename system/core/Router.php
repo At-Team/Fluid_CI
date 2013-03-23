@@ -163,7 +163,7 @@ class CI_Router {
 			return $this->_set_default_controller();
 		}
 
-		// Do we need to remove the URL suffix?
+	// Do we need to remove the URL suffix?
 		$this->uri->_remove_url_suffix();
 
 		// Compile the segments into an array
@@ -174,6 +174,7 @@ class CI_Router {
 
 		// Re-index the segment array so that it starts with 1 rather than 0
 		$this->uri->_reindex_segments();
+
 	}
 
 	// --------------------------------------------------------------------
@@ -228,6 +229,7 @@ class CI_Router {
 	 */
 	function _set_request($segments = array())
 	{
+
 		$segments = $this->_validate_request($segments);
 
 		if (count($segments) == 0)
@@ -272,12 +274,13 @@ class CI_Router {
 			return $segments;
 		}
 
+
 		// Does the requested controller exist in the root folder?
 		if (file_exists(APPPATH.'controllers/'.$segments[0].'.php'))
 		{
 			return $segments;
 		}
-
+		
 		// Is the controller in a sub-folder?
 		if (is_dir(APPPATH.'controllers/'.$segments[0]))
 		{
@@ -285,8 +288,9 @@ class CI_Router {
 			$this->set_directory($segments[0]);
 			$segments = array_slice($segments, 1);
 
+
 			if (count($segments) > 0)
-			{
+			{show_error('asd');
 				// Does the requested controller exist in the sub-folder?
 				if ( ! file_exists(APPPATH.'controllers/'.$this->fetch_directory().$segments[0].'.php'))
 				{
@@ -333,7 +337,6 @@ class CI_Router {
 
 			return $segments;
 		}
-
 
 		// If we've gotten this far it means that the URI does not correlate to a valid
 		// controller class.  We will now see if there is an override
