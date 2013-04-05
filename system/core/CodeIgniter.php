@@ -185,7 +185,7 @@
 	}
 
 
-	
+
 
 	$FD =& load_class('Fluid', 'core');
 
@@ -396,17 +396,25 @@
 			$view_path = substr($FD->get_user_group(),strlen($FD->get_fluid_keyword()) +1 );
 
 			// form the final view path
-			$view_path = $view_path . $method . '.php';
+			$view_path_with_ext = $view_path . $method . '.php';
 
-			//check if the file exists			
-			if (!file_exists(APPPATH. 'views/' . $view_path )){
+			//check if the file exists
+			if (!file_exists(APPPATH. 'views/' . $view_path_with_ext )){
 					show_404();
+			}
+
+			$UA =& load_class('User_agent', 'libraries');
+
+			if ($UA->is_mobile()){
+				//show_error($view_path . 'mobile/' . $method . '.php');
+			}else if ($UA->is_browser()){
+				//show_error($view_path_with_ext);
 			}
 			//loadt the appropiate class
 			$load =& load_class('Loader', 'core');
 
 			//load the view in the buffer ready for output
-			$load->view($view_path);
+			$load->view($view_path_with_ext);
 	}
 
 
