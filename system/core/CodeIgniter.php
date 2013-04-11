@@ -406,10 +406,10 @@
 			$UA =& load_class('User_agent', 'libraries');
 
 			if ($UA->is_mobile()){
+				$view_path_with_ext =  $view_path . 'mobile/' . $method . '.php';
 				//show_error($view_path . 'mobile/' . $method . '.php');
-			}else if ($UA->is_browser()){
-				//show_error($view_path_with_ext);
 			}
+
 			//loadt the appropiate class
 			$load =& load_class('Loader', 'core');
 
