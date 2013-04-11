@@ -28,10 +28,10 @@
 // ------------------------------------------------------------------------
 
 /**
- * Creates a link to load the appropiate css
+ * Creates a link to load the appropiate js
  *
- * Create a local URL based on your basepath. Segments can be passed via the
- * first parameter either as a string or an array.
+ *
+ *
  *
  * @access	public
  * @param	string
@@ -77,9 +77,128 @@ if ( ! function_exists('fluid_load_js'))
 		//show_error(implode(' ** ', $_SERVER));
 
 		if ($file){
-			return '<script type="text/javascript" src="http://'. SITE_URL . implode('/', $user_group_path) . '/' . $filename . '.js"> </script>' ;
+			return '<script type="text/javascript" src="http://'. SITE_URL . implode('/', $user_group_path)  . $filename . '.js"> </script>' ;
 		}else{
 			return '<!-- ' . $filename . '.js was not found in the group \'' . $self->fluid->get_user_group() . '\' nor in the inheritence tree. Please check its existence-->';
+		}
+
+	}
+}
+
+
+/**
+ * Creates a link to load the appropiate css
+ *
+ *
+ *
+ *
+ * @access	public
+ * @param	string
+ * @return	string
+ */
+if ( ! function_exists('fluid_load_css'))
+{
+	function fluid_load_css($filename = '',$self,$media = 'screen')
+	{
+		if ($filename == '') return '';
+
+		$base_base = explode('/', BASEPATH ) ;
+		//pop twice to get to base path
+		array_pop($base_base);
+		array_pop($base_base);
+
+		$user_group_path = explode('/',$self->fluid->get_user_group());
+		array_pop($user_group_path);
+
+		$base = array_merge($base_base,$user_group_path);
+
+		$file = false ;
+
+		//search untill parent path untill the file is found..
+		//concept of inheritence..
+		//if an js or css library is not found in this group
+		//search in parent to get hold of it..
+		//if not found just print an error to usre saying
+		//not found
+
+		while(array_count_values($base) >=  array_count_values($base_base) ){
+
+			if (!file_exists( implode('/', $base) . '/' . $filename . '.css')){
+					array_pop($base);
+					array_pop($user_group_path);
+			}else{
+				$file = true ;
+				break;
+			}
+
+		}//while
+
+		//show_error(implode(' ** ', $_SERVER));
+
+		if ($file){
+			return '<link href="http://'. SITE_URL . implode('/', $user_group_path)  . $filename . '.css" media="'. $media .'" rel="stylesheet" type="text/css" />' ;
+		}else{
+			return '<!-- ' . $filename . '.css was not found in the group \'' . $self->fluid->get_user_group() . '\' nor in the inheritence tree. Please check its existence-->';
+		}
+
+	}
+}
+
+
+
+/**
+ * Creates a link to load the appropiate css
+ *
+ *
+ *
+ *
+ * @access	public
+ * @param	string
+ * @return	string
+ */
+if ( ! function_exists('fluid_load_image'))
+{
+	function fluid_load_image($filename = '',$self,$htmlparams = "")
+	{
+		if ($filename == '') return '';
+
+		$base_base = explode('/', BASEPATH ) ;
+		//pop twice to get to base path
+		array_pop($base_base);
+		array_pop($base_base);
+
+		$user_group_path = explode('/',$self->fluid->get_user_group());
+		array_pop($user_group_path);
+
+		$base = array_merge($base_base,$user_group_path);
+
+		$file = false ;
+
+		//search untill parent path untill the file is found..
+		//concept of inheritence..
+		//if an js or css library is not found in this group
+		//search in parent to get hold of it..
+		//if not found just print an error to usre saying
+		//not found
+
+		while(array_count_values($base) >=  array_count_values($base_base) ){
+
+			if (!file_exists( implode('/', $base) . '/' . $filename )){
+					array_pop($base);
+					array_pop($user_group_path);
+			}else{
+				$file = true ;
+				break;
+			}
+
+		}//while
+
+		//show_error(implode(' ** ', $_SERVER));
+
+		if ($file){
+			return '<img src="http://'. SITE_URL . implode('/', $user_group_path)  . '/' . $filename . '"' . $htmlparams .'/>' ;
+		}else{
+			return '<!-- ' . $filename . ' was not found in the group \'' . $self->fluid->get_user_group() . '\' nor in the inheritence tree. Please check its existence-->';
 		}
 
 	}

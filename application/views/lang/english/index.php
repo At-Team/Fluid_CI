@@ -7,6 +7,7 @@
 
 
 	<?php echo fluid_load_js('test',$this) ?>
+	<?php echo fluid_load_css('test',$this) ?>
 
 	<style type="text/css">
 
@@ -84,6 +85,9 @@
 
 		<p>If you are exploring CodeIgniter Fluid for the very first time, you should start by reading the <a href="user_guide/">User Guide</a>.</p>
 	</div>
+
+
+	<?php echo fluid_load_image('col.jpg',$this) ?>
 
 	<p class="footer">Page rendered in <strong>{elapsed_time}</strong> seconds</p>
 </div>
