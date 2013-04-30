@@ -72,7 +72,7 @@
 <body>
 
 <div id="container">
-	<h1>Welcome to English a subgroup inside lang group </h1>
+	<h1>Welcome to English a subgroup inside lang group <b>MOBILE</b> </h1>
 
 	<div id="body">
 		<p>The page you are looking at is the homepage for  English a subgroup inside lang group.</p>

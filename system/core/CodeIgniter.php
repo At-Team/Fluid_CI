@@ -143,6 +143,7 @@
 		$CFG->_assign_to_config($assign_to_config);
 	}
 
+
 /*
  * ------------------------------------------------------
  *  Instantiate the UTF-8 class
@@ -156,6 +157,7 @@
  */
 
 	$UNI =& load_class('Utf8', 'core');
+
 
 /*
  * ------------------------------------------------------
@@ -172,7 +174,9 @@
  */
 	$RTR =& load_class('Router', 'core');
 
+
 	$RTR->_set_routing();
+
 
 	// Set any routing overrides that may exist in the main index file
 	if (isset($routing))
@@ -181,7 +185,7 @@
 	}
 
 
-	
+
 
 	$FD =& load_class('Fluid', 'core');
 
@@ -305,6 +309,7 @@
 		}
 	}
 
+
 /*
  * ------------------------------------------------------
  *  Is there a "pre_controller" hook?
@@ -334,6 +339,7 @@
  *  Call the requested method
  * ------------------------------------------------------
  */
+
 	// Is there a "remap" function? If so, we call it instead
 	if (method_exists($CI, '_remap'))
 	{
@@ -365,13 +371,50 @@
 			}
 			else
 			{
-				show_404("{$class}/{$method}");
+				//fluid
+				if ($FD->is_fluid_enabled()){
+					$no_method_in_controller = true;
+				}else{
+					show_404("{$class}/{$method}");
+				}
 			}
 		}
 
-		// Call the requested method.
-		// Any URI segments present (besides the class/function) will be passed to the method for convenience
-		call_user_func_array(array(&$CI, $method), array_slice($URI->rsegments, 2));
+		if (!isset($no_method_in_controller)){
+			// Call the requested method.
+			// Any URI segments present (besides the class/function) will be passed to the method for convenience
+			call_user_func_array(array(&$CI, $method), array_slice($URI->rsegments, 2));
+		}
+	}
+
+
+
+	//FLuid load view automatically
+	//if output null and fluid enabled..
+	if (($OUT->get_output() =='' || isset($no_method_in_controller)) && $FD->is_fluid_enabled()){
+		// find eth view path form fd using the controller path
+			$view_path = substr($FD->get_user_group(),strlen($FD->get_fluid_keyword()) +1 );
+
+			// form the final view path
+			$view_path_with_ext = $view_path . $method . '.php';
+
+			//check if the file exists
+			if (!file_exists(APPPATH. 'views/' . $view_path_with_ext )){
+					show_404();
+			}
+
+			$UA =& load_class('User_agent', 'libraries');
+
+			if ($UA->is_mobile()){
+				$view_path_with_ext =  $view_path . 'mobile/' . $method . '.php';
+				//show_error($view_path . 'mobile/' . $method . '.php');
+			}
+
+			//loadt the appropiate class
+			$load =& load_class('Loader', 'core');
+
+			//load the view in the buffer ready for output
+			$load->view($view_path_with_ext);
 	}
 
 

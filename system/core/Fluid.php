@@ -162,7 +162,7 @@ class CI_Fluid {
 
 		if ($fluid_temp[0] != $this->get_fluid_keyword()) return $str;
 
-		if ($fluid_temp[1] == 'reset'){
+		if (count($fluid_temp) > 1 &&  $fluid_temp[1] == 'reset'){
 			$this->disable_fluid();
 			return substr($str, strlen($this->get_fluid_keyword() . '/reset')); //length of fluid/reset
 		}
@@ -206,7 +206,7 @@ class CI_Fluid {
 
 		if (!$flag){
 			$this->disable_fluid();
-			show_error('No such group found. Check your group routes. Fluid is resetted');
+			show_error('<h3>&nbsp;&nbsp;&nbsp;Fluid</h3><br/>&nbsp;&nbsp;&nbsp;No such group found. Check your group routes. Fluid is resetted');
 
 		}
 		// if enabled via cookie and no match found in url go using default url
